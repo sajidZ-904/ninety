@@ -1,0 +1,8 @@
+.venv
+frontend
+**/__pycache__
+*.db
+*.db-wal
+*.db-shm
+test-artifacts
+.pytest_cache

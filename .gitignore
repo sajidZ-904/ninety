@@ -1,0 +1,25 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local databases (the app seeds itself)
+*.db
+*.db-wal
+*.db-shm
+
+# Node / Next.js
+node_modules/
+.next/
+tsconfig.tsbuildinfo
+
+# Test output (keep test-artifacts/failure-trace.zip)
+frontend/test-results/
+frontend/playwright-report/
+test-artifacts/*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.env
