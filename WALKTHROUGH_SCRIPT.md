@@ -1,6 +1,6 @@
 # Demo Walkthrough Script (~6 minutes)
 
-Setup: `docker compose up --build` (seeded on boot, clock pinned at Wed 2026-11-11 09:00 America/Chicago). Open `http://localhost:3000` in two windows — Window A switches to **Alex Rivera (Facilitator)**, Window B to **Jordan Lee (Team Member)**.
+Setup: `docker compose up --build` (seeded on boot, clock pinned at Wed 2026-11-11 09:00 America/Chicago). Open `http://localhost:3000` in two windows — Window A stays on **Avery Admin (Facilitator)**, Window B switches to **Blake Brooks (Team Member)**.
 
 ## 1. Overview and identity (0:00–0:40)
 
