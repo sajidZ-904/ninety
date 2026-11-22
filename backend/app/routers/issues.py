@@ -4,13 +4,15 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from backend.app.database import get_db
-from backend.app.models import Issue, Measurable, User
+from backend.app.models import Issue, Measurable, Score, User
 from backend.app.schemas import (
     IssueOut, IssueCreate, MakeIssueRequest, IssuePriorityUpdate,
     IssueSolveRequest, IssueSource
 )
 from backend.app.auth import require_team_read, require_team_write, get_current_user
-from backend.app.clock import get_app_now, as_utc
+from backend.app.clock import (
+    get_app_now, as_utc, get_13_weeks_ending_current, get_current_week_start,
+)
 from backend.app.rules import compute_measurable_status, sort_unsolved_issues
 from backend.app.socket_manager import manager
 
@@ -123,6 +125,28 @@ async def make_issue_from_measurable(
     ).first()
     if not measurable:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Measurable not found on this team")
+
+    if payload.week_start not in get_13_weeks_ending_current():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="week_start must be a Monday within the last 13 weeks"
+        )
+
+    score = db.query(Score).filter(
+        Score.measurable_id == payload.measurable_id,
+        Score.week_start == payload.week_start
+    ).first()
+    cell_status = compute_measurable_status(
+        measurable.goal,
+        score.value if score else None,
+        payload.week_start,
+        get_current_week_start(),
+    )
+    if cell_status != "off_track":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only an off-track score can be made into an Issue"
+        )
 
     # Fast path check for existing unsolved issue
     existing = db.query(Issue).filter(

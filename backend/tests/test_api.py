@@ -114,6 +114,44 @@ def test_concurrent_make_it_an_issue(client: TestClient):
     issue_ids = {r.json()["id"] for r in results}
     assert len(issue_ids) == 1, f"Expected 1 unique issue ID, got: {issue_ids}"
 
+def test_make_it_an_issue_rejects_non_off_track_cells(client: TestClient):
+    """Only off-track cells may become issues: on-track and pending are refused."""
+    headers = {"x-user-id": "u2"}
+
+    # m1 week 2026-09-14 scored 14 against >= 10 -> on track
+    on_track = client.post(
+        "/api/teams/team_lead/issues/make-from-measurable",
+        json={"measurable_id": "m1", "week_start": "2026-09-14"},
+        headers=headers,
+    )
+    assert on_track.status_code == 400, on_track.text
+
+    # m1 current week 2026-11-09 has no score -> pending
+    pending = client.post(
+        "/api/teams/team_lead/issues/make-from-measurable",
+        json={"measurable_id": "m1", "week_start": "2026-11-09"},
+        headers=headers,
+    )
+    assert pending.status_code == 400, pending.text
+
+def test_make_it_an_issue_rejects_week_outside_window(client: TestClient):
+    """A Monday outside the 13-week scorecard window is refused."""
+    resp = client.post(
+        "/api/teams/team_lead/issues/make-from-measurable",
+        json={"measurable_id": "m1", "week_start": "2026-01-05"},
+        headers={"x-user-id": "u2"},
+    )
+    assert resp.status_code == 400, resp.text
+
+def test_make_it_an_issue_requires_monday(client: TestClient):
+    """A non-Monday week key fails schema validation with 422."""
+    resp = client.post(
+        "/api/teams/team_lead/issues/make-from-measurable",
+        json={"measurable_id": "m1", "week_start": "2026-10-27"},
+        headers={"x-user-id": "u2"},
+    )
+    assert resp.status_code == 422, resp.text
+
 def test_meeting_lifecycle_and_summary(client: TestClient):
     """Test full meeting lifecycle: start, join, advance sections, rate, end, summary."""
     # u2 starts meeting in team_sales

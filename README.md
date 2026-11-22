@@ -27,7 +27,7 @@ Auth is the seeded user switcher: REST calls send `x-user-id`; the WebSocket han
 ./scripts/run_tests.sh          # or: python scripts/test_all.py ; --skip-e2e skips step 3
 ```
 
-1. **pytest (26 tests):** every 2.6 rule with boundary cases, cross-team 403, observer write 403, concurrent duplicate-free *Make it an Issue*, meeting lifecycle, facilitator-only control, live section timer, WebSocket gating.
+1. **pytest (29 tests):** every 2.6 rule with boundary cases, cross-team 403, observer write 403, concurrent duplicate-free *Make it an Issue*, validation of the source week and off-track status, meeting lifecycle, facilitator-only control, live section timer, WebSocket gating.
 2. Regenerates `rules_report.json` from a freshly seeded database and validates its shape.
 3. Builds and boots the stack on fresh processes (SQLite e2e DB + FastAPI + Next.js) and runs the **Playwright two-browser test**: facilitator advances Scorecard → IDS → Conclude, the attendee follows live, rates, and both see the summary after a refresh.
 

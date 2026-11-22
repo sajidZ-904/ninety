@@ -34,4 +34,4 @@ Advance to Conclude: To-Do recap (done / due) and the rating control. Window A r
 docker compose exec backend python backend/rules_report.py
 ```
 
-Show it matches the committed `rules_report.json` (generated from a fresh seed, nothing hard-coded), and mention `./scripts/run_tests.sh` — 26 pytest cases, report regeneration, and the Playwright two-browser e2e — plus `test-artifacts/failure-trace.zip` as a real failing trace.
+Show it matches the committed `rules_report.json` (generated from a fresh seed, nothing hard-coded), and mention `./scripts/run_tests.sh` — 29 pytest cases, report regeneration, and the Playwright two-browser e2e — plus `test-artifacts/failure-trace.zip` as a real failing trace.
