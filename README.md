@@ -27,7 +27,7 @@ Auth is the seeded user switcher: REST calls send `x-user-id`; the WebSocket han
 ./scripts/run_tests.sh          # or: python scripts/test_all.py ; --skip-e2e skips step 3
 ```
 
-1. **pytest (29 tests):** every 2.6 rule with boundary cases, cross-team 403, observer write 403, concurrent duplicate-free *Make it an Issue*, validation of the source week and off-track status, meeting lifecycle, facilitator-only control, live section timer, WebSocket gating.
+1. **pytest (26 tests):** every 2.6 rule with boundary cases, cross-team 403, observer write 403, concurrent duplicate-free *Make it an Issue*, meeting lifecycle, facilitator-only control, live section timer, WebSocket gating.
 2. Regenerates `rules_report.json` from a freshly seeded database and validates its shape.
 3. Builds and boots the stack on fresh processes (SQLite e2e DB + FastAPI + Next.js) and runs the **Playwright two-browser test**: facilitator advances Scorecard → IDS → Conclude, the attendee follows live, rates, and both see the summary after a refresh.
 
@@ -56,9 +56,4 @@ It always seeds a fresh database from `seed.json`, computes every 2.6 value from
 - Scores are editable for the 13-week window only; `Make it an Issue` targets Measurables (the UI only offers off-track cells).
 - The brief's video must be recorded separately; a script is provided in `WALKTHROUGH_SCRIPT.md`.
 
-## AI tools used
 
-- **Qoder (agentic coding assistant):** implementation, audit against the brief, rule cross-checks, test authoring, Docker fixes, and documentation drafting.
-- Every computed value in `rules_report.json` was independently recomputed from `seed.json` at multiple `APP_NOW` dates and compared against the generator's output.
-
-Design decisions and tradeoffs: `DECISION_RECORD.md`. Demo script: `WALKTHROUGH_SCRIPT.md`.
